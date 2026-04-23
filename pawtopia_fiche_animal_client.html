@@ -858,7 +858,6 @@ function dateStr(id) {
 const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxAEaZfEGYDM1RkgLmoGUfIskY6Thrl0At3Dj10FeoZn2j8frSvecf_IYIiDbmPV--k/exec";
 
 function submitForm() {
-  // Vérification champs obligatoires
   const missing = requiredFields.filter(id => !val(id));
   if(missing.length > 0) {
     missing.forEach(id => {
@@ -866,7 +865,6 @@ function submitForm() {
       if(el) { el.style.borderColor='var(--red)'; }
       setTimeout(() => { if(el) el.style.borderColor=''; }, 3000);
     });
-    // Scroll vers le premier champ manquant
     const first = document.getElementById(missing[0]);
     if(first) first.scrollIntoView({ behavior:'smooth', block:'center' });
     alert('⚠️ Merci de remplir tous les champs obligatoires (★) avant d\'envoyer.');
@@ -874,7 +872,6 @@ function submitForm() {
   }
   if(!val('fa-sexe')) { alert('⚠️ Merci de sélectionner le sexe de votre animal.'); return; }
 
-  // Comportements cochés
   const comportements = [];
   if(chk('ch-fugue')) comportements.push('Tendance à fuguer / sauter les clôtures');
   if(chk('ch-anx'))   comportements.push('Anxiété de séparation');
@@ -882,83 +879,46 @@ function submitForm() {
   if(chk('ch-laisse'))comportements.push('Tire fort en laisse');
   if(chk('ch-aboie')) comportements.push('Aboie beaucoup');
 
-  // Données à envoyer au script
   const data = {
-    nom:           val('fa-nom'),
-    race:          val('fa-race'),
-    sexe:          val('fa-sexe'),
-    ddn:           dateStr('fa-ddn'),
-    poids:         val('fa-poids'),
-    couleur:       val('fa-couleur'),
-    puce:          val('fa-puce'),
-    carnet:        val('fa-carnet'),
-    proprio:       val('fa-proprio'),
-    email:         val('fa-email'),
-    tel:           val('fa-tel'),
-    tel2:          val('fa-tel2'),
-    adresse:       val('fa-adresse'),
-    assur:         val('fa-assur'),
-    urgNom:        val('fa-urg-nom'),
-    urgTel:        val('fa-urg-tel'),
-    vetoNom:       val('fa-veto-nom'),
-    vetoTel:       val('fa-veto-tel'),
-    alimtype:      val('fa-alimtype'),
-    alimmarque:    val('fa-alimmarque'),
-    alimqte:       val('fa-alimqte'),
-    alimrepas:     val('fa-alimrepas'),
-    friandises:    val('fa-friandises'),
-    allergies:     val('fa-allergies'),
-    nourrit:       val('fa-nourrit'),
-    alimNote:      val('fa-alim-note'),
-    sante:         val('fa-sante'),
-    maladies:      val('fa-maladies'),
-    chirurgie:     val('fa-chirurgie'),
-    allergmed:     val('fa-allergmed'),
-    anti:          dateStr('fa-anti'),
-    verm:          dateStr('fa-verm'),
-    vacChpp:       dateStr('vac-chpp'),
-    vacLepto:      dateStr('vac-lepto'),
-    vacToux:       dateStr('vac-toux'),
-    vacRage:       dateStr('vac-rage'),
-    traitement:    val('fa-traitement'),
-    traitDetail:   val('fa-traitdetail'),
-    car:           val('fa-car'),
-    autchien:      val('fa-autchien'),
-    chats:         val('fa-chats'),
-    enfants:       val('fa-enfants'),
-    peurs:         val('fa-peurs'),
-    sommeil:       val('fa-sommeil'),
+    nom: val('fa-nom'), race: val('fa-race'), sexe: val('fa-sexe'),
+    ddn: dateStr('fa-ddn'), poids: val('fa-poids'), couleur: val('fa-couleur'),
+    puce: val('fa-puce'), carnet: val('fa-carnet'),
+    proprio: val('fa-proprio'), email: val('fa-email'), tel: val('fa-tel'),
+    tel2: val('fa-tel2'), adresse: val('fa-adresse'), assur: val('fa-assur'),
+    urgNom: val('fa-urg-nom'), urgTel: val('fa-urg-tel'),
+    vetoNom: val('fa-veto-nom'), vetoTel: val('fa-veto-tel'),
+    alimtype: val('fa-alimtype'), alimmarque: val('fa-alimmarque'),
+    alimqte: val('fa-alimqte'), alimrepas: val('fa-alimrepas'),
+    friandises: val('fa-friandises'), allergies: val('fa-allergies'),
+    nourrit: val('fa-nourrit'), alimNote: val('fa-alim-note'),
+    sante: val('fa-sante'), maladies: val('fa-maladies'),
+    chirurgie: val('fa-chirurgie'), allergmed: val('fa-allergmed'),
+    anti: dateStr('fa-anti'), verm: dateStr('fa-verm'),
+    vacChpp: dateStr('vac-chpp'), vacLepto: dateStr('vac-lepto'),
+    vacToux: dateStr('vac-toux'), vacRage: dateStr('vac-rage'),
+    traitement: val('fa-traitement'), traitDetail: val('fa-traitdetail'),
+    car: val('fa-car'), autchien: val('fa-autchien'),
+    chats: val('fa-chats'), enfants: val('fa-enfants'),
+    peurs: val('fa-peurs'), sommeil: val('fa-sommeil'),
     comportements: comportements.length ? comportements.join(' | ') : 'Rien à signaler',
-    comportement:  val('fa-comportement'),
-    objets:        val('fa-objets'),
-    obs:           val('fa-obs')
+    comportement: val('fa-comportement'), objets: val('fa-objets'), obs: val('fa-obs')
   };
 
-  // Afficher l'état de chargement sur le bouton
+  // Bouton en chargement
   const btn = document.querySelector('.submit-btn');
-  const btnOriginal = btn.innerHTML;
   btn.innerHTML = '⏳ Envoi en cours…';
   btn.disabled = true;
   btn.style.opacity = '0.7';
 
-  fetch(SCRIPT_URL, {
-    method: 'POST',
-    mode: 'no-cors',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(data)
-  })
-  .then(() => {
-    // no-cors = pas de réponse lisible, mais si on arrive ici c'est que ça a fonctionné
+  // Envoi via GET avec les données encodées (contourne CORS)
+  const url = SCRIPT_URL + '?data=' + encodeURIComponent(JSON.stringify(data));
+  const img = new Image();
+  img.onload = img.onerror = function() {
     document.getElementById('submit-zone').style.display = 'none';
     document.getElementById('success-zone').style.display = 'block';
     document.getElementById('success-zone').scrollIntoView({ behavior: 'smooth' });
-  })
-  .catch(() => {
-    btn.innerHTML = btnOriginal;
-    btn.disabled = false;
-    btn.style.opacity = '1';
-    alert('❌ Une erreur est survenue lors de l\'envoi. Vérifiez votre connexion internet et réessayez.');
-  });
+  };
+  img.src = url;
 }
 </script>
 </body>
