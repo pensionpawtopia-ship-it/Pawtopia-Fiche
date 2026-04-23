@@ -1,0 +1,965 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pawtopia – Fiche d'admission de votre compagnon</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --forest: #2D4A3E;
+  --forest-deep: #1A2B24;
+  --forest-mid: #3d6352;
+  --gold: #B8860B;
+  --gold-light: #D4A820;
+  --gold-pale: #f0d878;
+  --cream: #F5EDD8;
+  --cream-dark: #EBE0C8;
+  --cream-mid: #f0e8d0;
+  --text: #2C2416;
+  --muted: #7A6E62;
+  --border: #D4C9B0;
+  --white: #FEFCF7;
+  --red: #c0392b;
+  --green: #2e7d52;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Outfit', sans-serif;
+  background: var(--cream);
+  color: var(--text);
+  min-height: 100vh;
+}
+
+/* ── HERO HEADER ── */
+.hero {
+  background: var(--forest-deep);
+  position: relative;
+  overflow: hidden;
+  padding: 48px 40px 40px;
+  text-align: center;
+}
+.hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse at 20% 50%, rgba(184,134,11,0.12) 0%, transparent 60%),
+    radial-gradient(ellipse at 80% 30%, rgba(45,74,62,0.4) 0%, transparent 60%);
+}
+.hero-paw {
+  font-size: 48px;
+  display: block;
+  margin-bottom: 12px;
+  animation: floatPaw 3s ease-in-out infinite;
+  position: relative;
+}
+@keyframes floatPaw {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+}
+.hero-brand {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 36px;
+  font-weight: 700;
+  color: var(--gold-light);
+  letter-spacing: 0.06em;
+  position: relative;
+}
+.hero-sub {
+  font-size: 11px;
+  color: rgba(245,237,216,0.5);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  margin-top: 4px;
+  position: relative;
+}
+.hero-desc {
+  margin-top: 20px;
+  font-size: 14px;
+  color: rgba(245,237,216,0.7);
+  max-width: 520px;
+  margin-left: auto;
+  margin-right: auto;
+  line-height: 1.7;
+  position: relative;
+}
+.hero-bar {
+  width: 60px;
+  height: 2px;
+  background: var(--gold);
+  margin: 16px auto 0;
+  position: relative;
+}
+
+/* ── PROGRESS BAR ── */
+.progress-wrap {
+  background: var(--forest);
+  padding: 0 40px;
+  display: flex;
+  align-items: center;
+  gap: 0;
+  overflow-x: auto;
+}
+.prog-step {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  flex-shrink: 0;
+}
+.prog-dot {
+  padding: 12px 16px;
+  font-size: 11.5px;
+  font-weight: 500;
+  color: rgba(245,237,216,0.4);
+  letter-spacing: 0.04em;
+  cursor: pointer;
+  border-bottom: 3px solid transparent;
+  transition: all 0.2s;
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.prog-dot.active { color: var(--gold-pale); border-bottom-color: var(--gold); }
+.prog-dot.done { color: rgba(245,237,216,0.6); }
+.prog-dot.done .pdot-num { background: var(--green); }
+.pdot-num {
+  width: 20px; height: 20px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.1);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 10px; font-weight: 700;
+  flex-shrink: 0;
+}
+.prog-dot.active .pdot-num { background: var(--gold); color: #1A2B24; }
+
+/* ── MAIN LAYOUT ── */
+.main {
+  max-width: 780px;
+  margin: 0 auto;
+  padding: 40px 24px 80px;
+}
+
+/* ── SECTION CARD ── */
+.section-card {
+  background: var(--white);
+  border-radius: 16px;
+  box-shadow: 0 4px 32px rgba(45,74,62,0.08);
+  overflow: hidden;
+  margin-bottom: 28px;
+  animation: fadeUp 0.4s ease forwards;
+  opacity: 0;
+}
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.section-card:nth-child(1) { animation-delay: 0.05s; }
+.section-card:nth-child(2) { animation-delay: 0.1s; }
+.section-card:nth-child(3) { animation-delay: 0.15s; }
+.section-card:nth-child(4) { animation-delay: 0.2s; }
+
+.card-header {
+  background: linear-gradient(135deg, var(--forest) 0%, var(--forest-mid) 100%);
+  padding: 16px 24px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.card-header-icon { font-size: 20px; }
+.card-header-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--cream);
+  letter-spacing: 0.03em;
+}
+.card-header-sub {
+  font-size: 11px;
+  color: rgba(245,237,216,0.5);
+  letter-spacing: 0.08em;
+  margin-left: auto;
+  text-transform: uppercase;
+}
+
+.card-body {
+  padding: 24px 24px 20px;
+}
+
+/* ── FORM FIELDS ── */
+.fg { margin-bottom: 16px; }
+.fg:last-child { margin-bottom: 0; }
+.fg label {
+  display: block;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.09em;
+  margin-bottom: 6px;
+}
+.fg input, .fg select, .fg textarea {
+  width: 100%;
+  padding: 10px 14px;
+  border: 1.5px solid var(--border);
+  border-radius: 9px;
+  font-family: 'Outfit', sans-serif;
+  font-size: 14px;
+  color: var(--text);
+  background: var(--white);
+  outline: none;
+  transition: border-color 0.18s, box-shadow 0.18s;
+}
+.fg input:focus, .fg select:focus, .fg textarea:focus {
+  border-color: var(--forest-mid);
+  box-shadow: 0 0 0 3px rgba(45,74,62,0.09);
+}
+.fg textarea { resize: vertical; min-height: 72px; }
+.fg input::placeholder, .fg textarea::placeholder { color: rgba(122,110,98,0.5); }
+
+.row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.row3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; }
+
+/* REQUIRED STAR */
+.req { color: var(--gold); font-size: 13px; margin-left: 2px; }
+
+/* ── RADIO PILLS ── */
+.pills { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 2px; }
+.pill {
+  padding: 7px 16px;
+  border: 1.5px solid var(--border);
+  border-radius: 20px;
+  font-size: 13px;
+  cursor: pointer;
+  transition: all 0.18s;
+  font-family: 'Outfit', sans-serif;
+  background: var(--white);
+  color: var(--text);
+  user-select: none;
+}
+.pill:hover { border-color: var(--forest-mid); }
+.pill.sel { border-color: var(--forest); background: var(--forest); color: var(--cream); }
+
+/* ── TOGGLE SWITCH ── */
+.toggle-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 11px 14px;
+  background: var(--cream);
+  border: 1.5px solid var(--border);
+  border-radius: 9px;
+  margin-bottom: 10px;
+  font-size: 13.5px;
+}
+.toggle-switch {
+  position: relative;
+  width: 44px; height: 24px;
+  flex-shrink: 0;
+}
+.toggle-switch input { opacity: 0; width: 0; height: 0; }
+.toggle-slider {
+  position: absolute;
+  inset: 0;
+  background: #ccc;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+.toggle-slider:before {
+  content: '';
+  position: absolute;
+  width: 18px; height: 18px;
+  left: 3px; bottom: 3px;
+  background: white;
+  border-radius: 50%;
+  transition: 0.2s;
+}
+.toggle-switch input:checked + .toggle-slider { background: var(--forest); }
+.toggle-switch input:checked + .toggle-slider:before { transform: translateX(20px); }
+
+/* ── CHECKLIST ── */
+.checklist { display: flex; flex-direction: column; gap: 8px; }
+.chk-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 10px 14px;
+  background: var(--cream);
+  border: 1.5px solid var(--border);
+  border-radius: 9px;
+  cursor: pointer;
+  transition: border-color 0.18s;
+  font-size: 13.5px;
+  line-height: 1.4;
+}
+.chk-item:hover { border-color: var(--forest-mid); }
+.chk-item.checked { border-color: var(--gold); background: rgba(184,134,11,0.05); }
+.chk-item input[type="checkbox"] {
+  width: 17px; height: 17px;
+  accent-color: var(--forest);
+  flex-shrink: 0;
+  margin-top: 1px;
+  cursor: pointer;
+}
+
+/* ── VAC TABLE ── */
+.vac-table { width: 100%; border-collapse: collapse; margin-top: 4px; }
+.vac-table th {
+  background: var(--forest);
+  color: var(--cream);
+  padding: 8px 12px;
+  font-size: 11.5px;
+  font-weight: 600;
+  text-align: left;
+  letter-spacing: 0.05em;
+}
+.vac-table td {
+  padding: 8px 12px;
+  border: 1px solid var(--border);
+  font-size: 13.5px;
+}
+.vac-table tr:nth-child(even) td { background: var(--cream); }
+.vac-table td input[type="date"] {
+  border: none;
+  background: transparent;
+  font-family: 'Outfit', sans-serif;
+  font-size: 13px;
+  color: var(--text);
+  padding: 0;
+  width: 100%;
+  outline: none;
+}
+
+/* ── IMPORTANT NOTE ── */
+.note-box {
+  background: rgba(184,134,11,0.08);
+  border: 1.5px solid rgba(184,134,11,0.3);
+  border-radius: 10px;
+  padding: 14px 16px;
+  font-size: 13px;
+  color: var(--text);
+  line-height: 1.6;
+  margin-bottom: 20px;
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+}
+.note-box .ni { font-size: 18px; flex-shrink: 0; margin-top: 1px; }
+
+/* ── SUBMIT ── */
+.submit-zone {
+  background: var(--white);
+  border-radius: 16px;
+  box-shadow: 0 4px 32px rgba(45,74,62,0.08);
+  padding: 28px 24px;
+  text-align: center;
+}
+.submit-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 22px;
+  font-weight: 600;
+  color: var(--forest);
+  margin-bottom: 8px;
+}
+.submit-desc {
+  font-size: 13.5px;
+  color: var(--muted);
+  line-height: 1.6;
+  margin-bottom: 24px;
+  max-width: 420px;
+  margin-left: auto;
+  margin-right: auto;
+}
+.submit-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 15px 40px;
+  background: var(--forest);
+  color: var(--cream);
+  border: none;
+  border-radius: 50px;
+  font-family: 'Outfit', sans-serif;
+  font-size: 15px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+  letter-spacing: 0.03em;
+  box-shadow: 0 4px 20px rgba(45,74,62,0.3);
+}
+.submit-btn:hover {
+  background: var(--forest-mid);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 28px rgba(45,74,62,0.35);
+}
+.submit-btn .arrow { font-size: 18px; transition: transform 0.2s; }
+.submit-btn:hover .arrow { transform: translateX(4px); }
+
+.submit-note {
+  font-size: 11.5px;
+  color: var(--muted);
+  margin-top: 14px;
+  line-height: 1.5;
+}
+
+/* ── SUCCESS MESSAGE ── */
+.success-zone {
+  display: none;
+  background: var(--white);
+  border-radius: 16px;
+  box-shadow: 0 4px 32px rgba(45,74,62,0.08);
+  padding: 48px 24px;
+  text-align: center;
+}
+.success-icon { font-size: 56px; display: block; margin-bottom: 16px; animation: pop 0.4s ease; }
+@keyframes pop {
+  0% { transform: scale(0.5); }
+  70% { transform: scale(1.15); }
+  100% { transform: scale(1); }
+}
+.success-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--forest);
+  margin-bottom: 10px;
+}
+.success-desc {
+  font-size: 14px;
+  color: var(--muted);
+  line-height: 1.7;
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+/* ── FOOTER ── */
+footer {
+  background: var(--forest-deep);
+  text-align: center;
+  padding: 20px;
+  font-size: 11.5px;
+  color: rgba(245,237,216,0.35);
+  letter-spacing: 0.06em;
+}
+
+/* ── RESPONSIVE ── */
+@media (max-width: 600px) {
+  .hero { padding: 36px 20px 32px; }
+  .hero-brand { font-size: 28px; }
+  .main { padding: 24px 16px 60px; }
+  .row2 { grid-template-columns: 1fr; }
+  .row3 { grid-template-columns: 1fr 1fr; }
+  .card-body { padding: 18px 16px; }
+  .progress-wrap { padding: 0 16px; }
+}
+
+/* DIVIDER */
+.divider { border: none; border-top: 1px solid var(--border); margin: 18px 0; }
+
+/* SUBLABEL */
+.sublabel {
+  font-size: 11.5px;
+  color: var(--muted);
+  font-style: italic;
+  margin-top: -10px;
+  margin-bottom: 14px;
+  line-height: 1.5;
+}
+
+/* SECTION TITLE INSIDE CARD */
+.inner-sec {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--forest);
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 6px;
+  margin: 20px 0 14px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.inner-sec:first-child { margin-top: 0; }
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<div class="hero">
+  <span class="hero-paw">🐾</span>
+  <div class="hero-brand">Pawtopia</div>
+  <div class="hero-sub">Pension Canine Familiale · Anoux (54)</div>
+  <div class="hero-desc">
+    Bienvenue ! Merci de remplir cette fiche d'admission pour votre compagnon.<br>
+    Ces informations nous permettent de lui offrir un séjour personnalisé et sécurisé.
+  </div>
+  <div class="hero-bar"></div>
+</div>
+
+<!-- PROGRESS -->
+<div class="progress-wrap">
+  <div class="prog-step">
+    <div class="prog-dot active" id="prog-0"><span class="pdot-num">1</span> Identité</div>
+  </div>
+  <div class="prog-step">
+    <div class="prog-dot" id="prog-1"><span class="pdot-num">2</span> Propriétaire</div>
+  </div>
+  <div class="prog-step">
+    <div class="prog-dot" id="prog-2"><span class="pdot-num">3</span> Alimentation</div>
+  </div>
+  <div class="prog-step">
+    <div class="prog-dot" id="prog-3"><span class="pdot-num">4</span> Santé</div>
+  </div>
+  <div class="prog-step">
+    <div class="prog-dot" id="prog-4"><span class="pdot-num">5</span> Comportement</div>
+  </div>
+</div>
+
+<!-- MAIN CONTENT -->
+<div class="main">
+
+  <div class="note-box">
+    <span class="ni">💡</span>
+    <div>Toutes les informations marquées d'une <strong style="color:var(--gold)">★</strong> sont obligatoires. Les autres nous aident à mieux connaître votre compagnon mais restent facultatives. Cette fiche est confidentielle et utilisée uniquement par Pawtopia.</div>
+  </div>
+
+  <!-- SECTION 1 : IDENTITÉ -->
+  <div class="section-card" id="sec-0">
+    <div class="card-header">
+      <span class="card-header-icon">🐕</span>
+      <span class="card-header-title">Identité de votre compagnon</span>
+      <span class="card-header-sub">1 / 5</span>
+    </div>
+    <div class="card-body">
+      <div class="row2">
+        <div class="fg"><label>Prénom de l'animal <span class="req">★</span></label><input type="text" id="fa-nom" placeholder="Luna" oninput="updateProgress()"></div>
+        <div class="fg"><label>Race <span class="req">★</span></label><input type="text" id="fa-race" placeholder="Labrador" oninput="updateProgress()"></div>
+      </div>
+      <div class="row3">
+        <div class="fg"><label>Date de naissance</label><input type="date" id="fa-ddn"></div>
+        <div class="fg"><label>Poids (kg) <span class="req">★</span></label><input type="number" id="fa-poids" placeholder="25" min="0.5" step="0.5" oninput="updateProgress()"></div>
+        <div class="fg"><label>Couleur / Signes</label><input type="text" id="fa-couleur" placeholder="Robe fauve…"></div>
+      </div>
+      <div class="fg">
+        <label>Sexe <span class="req">★</span></label>
+        <div class="pills">
+          <div class="pill" onclick="selectPill(this,'sexe')">Mâle</div>
+          <div class="pill" onclick="selectPill(this,'sexe')">Mâle castré</div>
+          <div class="pill" onclick="selectPill(this,'sexe')">Femelle</div>
+          <div class="pill" onclick="selectPill(this,'sexe')">Femelle stérilisée</div>
+        </div>
+        <input type="hidden" id="fa-sexe">
+      </div>
+      <div class="row2">
+        <div class="fg"><label>N° puce électronique <span class="req">★</span></label><input type="text" id="fa-puce" placeholder="250268xxxxxxxxx" maxlength="15" oninput="updateProgress()"></div>
+        <div class="fg"><label>N° passeport / carnet santé</label><input type="text" id="fa-carnet" placeholder="(optionnel)"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 2 : PROPRIÉTAIRE -->
+  <div class="section-card" id="sec-1">
+    <div class="card-header">
+      <span class="card-header-icon">👤</span>
+      <span class="card-header-title">Coordonnées du propriétaire</span>
+      <span class="card-header-sub">2 / 5</span>
+    </div>
+    <div class="card-body">
+      <div class="row2">
+        <div class="fg"><label>Nom et prénom <span class="req">★</span></label><input type="text" id="fa-proprio" placeholder="Martin Sophie" oninput="updateProgress()"></div>
+        <div class="fg"><label>Email <span class="req">★</span></label><input type="email" id="fa-email" placeholder="sophie@mail.fr" oninput="updateProgress()"></div>
+      </div>
+      <div class="row2">
+        <div class="fg"><label>Téléphone principal <span class="req">★</span></label><input type="tel" id="fa-tel" placeholder="06 xx xx xx xx" oninput="updateProgress()"></div>
+        <div class="fg"><label>Téléphone secondaire</label><input type="tel" id="fa-tel2" placeholder="(optionnel)"></div>
+      </div>
+      <div class="fg"><label>Adresse complète</label><input type="text" id="fa-adresse" placeholder="12 rue des Lilas, 54000 Nancy"></div>
+      <hr class="divider">
+      <div class="inner-sec">🚨 Contact d'urgence</div>
+      <div class="row2">
+        <div class="fg"><label>Nom du contact <span class="req">★</span></label><input type="text" id="fa-urg-nom" placeholder="Paul Martin" oninput="updateProgress()"></div>
+        <div class="fg"><label>Téléphone <span class="req">★</span></label><input type="tel" id="fa-urg-tel" placeholder="06 xx xx xx xx" oninput="updateProgress()"></div>
+      </div>
+      <hr class="divider">
+      <div class="inner-sec">🏥 Vétérinaire habituel</div>
+      <div class="row2">
+        <div class="fg"><label>Nom du vétérinaire <span class="req">★</span></label><input type="text" id="fa-veto-nom" placeholder="Dr Dupont" oninput="updateProgress()"></div>
+        <div class="fg"><label>Téléphone du cabinet <span class="req">★</span></label><input type="tel" id="fa-veto-tel" placeholder="03 xx xx xx xx" oninput="updateProgress()"></div>
+      </div>
+      <div class="fg"><label>Assurance responsabilité civile animale (n° contrat)</label><input type="text" id="fa-assur" placeholder="(optionnel)"></div>
+    </div>
+  </div>
+
+  <!-- SECTION 3 : ALIMENTATION -->
+  <div class="section-card" id="sec-2">
+    <div class="card-header">
+      <span class="card-header-icon">🍽️</span>
+      <span class="card-header-title">Alimentation</span>
+      <span class="card-header-sub">3 / 5</span>
+    </div>
+    <div class="card-body">
+      <div class="fg">
+        <label>Type d'alimentation <span class="req">★</span></label>
+        <div class="pills">
+          <div class="pill" onclick="selectPill(this,'alimtype')">🥜 Croquettes</div>
+          <div class="pill" onclick="selectPill(this,'alimtype')">🥫 Pâtée</div>
+          <div class="pill" onclick="selectPill(this,'alimtype')">🥩 BARF</div>
+          <div class="pill" onclick="selectPill(this,'alimtype')">🔀 Mixte</div>
+        </div>
+        <input type="hidden" id="fa-alimtype">
+      </div>
+      <div class="row2">
+        <div class="fg"><label>Marque / référence</label><input type="text" id="fa-alimmarque" placeholder="Royal Canin Adult"></div>
+        <div class="fg"><label>Quantité par repas</label><input type="text" id="fa-alimqte" placeholder="200g"></div>
+      </div>
+      <div class="row2">
+        <div class="fg"><label>Nombre de repas / jour</label>
+          <select id="fa-alimrepas">
+            <option value="">—</option>
+            <option>1 repas / jour</option>
+            <option>2 repas / jour</option>
+            <option>3 repas / jour</option>
+            <option>À volonté</option>
+          </select>
+        </div>
+        <div class="fg"><label>Friandises autorisées ?</label>
+          <div class="pills">
+            <div class="pill" onclick="selectPill(this,'friand')">✅ Oui</div>
+            <div class="pill" onclick="selectPill(this,'friand')">❌ Non</div>
+          </div>
+          <input type="hidden" id="fa-friandises">
+        </div>
+      </div>
+      <div class="fg"><label>Allergies / aliments interdits</label><input type="text" id="fa-allergies" placeholder="Aucune, ou précisez…"></div>
+      <div class="fg"><label>La nourriture sera fournie par</label>
+        <div class="pills">
+          <div class="pill" onclick="selectPill(this,'nourrit')">🧳 Le propriétaire (je l'apporte)</div>
+          <div class="pill" onclick="selectPill(this,'nourrit')">🏡 Pawtopia (supplément tarifaire)</div>
+        </div>
+        <input type="hidden" id="fa-nourrit">
+      </div>
+      <div class="fg"><label>Informations complémentaires sur l'alimentation</label><textarea id="fa-alim-note" placeholder="Horaires habituels, préférences, astuces…"></textarea></div>
+    </div>
+  </div>
+
+  <!-- SECTION 4 : SANTÉ -->
+  <div class="section-card" id="sec-3">
+    <div class="card-header">
+      <span class="card-header-icon">🏥</span>
+      <span class="card-header-title">Santé & Vaccinations</span>
+      <span class="card-header-sub">4 / 5</span>
+    </div>
+    <div class="card-body">
+      <div class="row2">
+        <div class="fg"><label>État de santé général</label><input type="text" id="fa-sante" placeholder="Bon état général"></div>
+        <div class="fg"><label>Maladies chroniques</label><input type="text" id="fa-maladies" placeholder="Aucune"></div>
+      </div>
+      <div class="row2">
+        <div class="fg"><label>Chirurgies / opérations récentes</label><input type="text" id="fa-chirurgie" placeholder="Aucune"></div>
+        <div class="fg"><label>Allergies médicamenteuses</label><input type="text" id="fa-allergmed" placeholder="Aucune"></div>
+      </div>
+      <div class="row2">
+        <div class="fg"><label>Dernier antiparasitaire externe</label><input type="date" id="fa-anti"></div>
+        <div class="fg"><label>Dernier vermifuge</label><input type="date" id="fa-verm"></div>
+      </div>
+
+      <hr class="divider">
+      <div class="inner-sec">💉 Vaccinations — dates de validité</div>
+      <div class="sublabel">Merci d'indiquer les dates d'expiration (figurant sur le carnet de santé ou passeport)</div>
+      <table class="vac-table">
+        <tr>
+          <th>Vaccin</th>
+          <th>Valide jusqu'au</th>
+        </tr>
+        <tr>
+          <td>CHPP – Carré / Rubarth / Parvo / Pi</td>
+          <td><input type="date" id="vac-chpp"></td>
+        </tr>
+        <tr>
+          <td>Leptospirose (L)</td>
+          <td><input type="date" id="vac-lepto"></td>
+        </tr>
+        <tr>
+          <td>⭐ Toux du chenil (Bordetella / Pi) — <em>fortement recommandé</em></td>
+          <td><input type="date" id="vac-toux"></td>
+        </tr>
+        <tr>
+          <td>Rage (si applicable)</td>
+          <td><input type="date" id="vac-rage"></td>
+        </tr>
+      </table>
+
+      <hr class="divider">
+      <div class="inner-sec">💊 Traitements en cours</div>
+      <div class="fg">
+        <label>Votre animal a-t-il un traitement en cours ?</label>
+        <div class="pills">
+          <div class="pill" onclick="selectPill(this,'trait');showTrait(false)">✅ Aucun traitement</div>
+          <div class="pill" onclick="selectPill(this,'trait');showTrait(true)">💊 Oui, traitement en cours</div>
+        </div>
+        <input type="hidden" id="fa-traitement">
+      </div>
+      <div id="trait-detail" style="display:none">
+        <div class="fg"><label>Détail du/des traitement(s) <span class="req">★</span></label>
+          <textarea id="fa-traitdetail" placeholder="Ex : Metacam 1mg – 1 comprimé/jour le matin – voie orale&#10;Merci de joindre l'ordonnance à votre arrivée"></textarea>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 5 : COMPORTEMENT -->
+  <div class="section-card" id="sec-4">
+    <div class="card-header">
+      <span class="card-header-icon">🐾</span>
+      <span class="card-header-title">Comportement & Habitudes</span>
+      <span class="card-header-sub">5 / 5</span>
+    </div>
+    <div class="card-body">
+      <div class="row2">
+        <div class="fg"><label>Caractère général</label><input type="text" id="fa-car" placeholder="Joueur, affectueux, calme…"></div>
+        <div class="fg"><label>Avec les autres chiens</label><input type="text" id="fa-autchien" placeholder="Sociable, sélectif…"></div>
+      </div>
+      <div class="row2">
+        <div class="fg"><label>Avec les chats</label><input type="text" id="fa-chats" placeholder="Ok, à éviter…"></div>
+        <div class="fg"><label>Avec les enfants</label><input type="text" id="fa-enfants" placeholder="Très sociable…"></div>
+      </div>
+      <div class="row2">
+        <div class="fg"><label>Peurs / phobies</label><input type="text" id="fa-peurs" placeholder="Tonnerre, feux d'artifice…"></div>
+        <div class="fg"><label>Habitudes de sommeil</label><input type="text" id="fa-sommeil" placeholder="Panier, canapé, chambre…"></div>
+      </div>
+
+      <hr class="divider">
+      <div class="inner-sec">✅ Points importants</div>
+      <div class="checklist">
+        <label class="chk-item" id="chk-fugue" onclick="tglChk(this)">
+          <input type="checkbox" id="ch-fugue" onclick="event.stopPropagation()"> 
+          <span>⚠️ Mon chien a tendance à fuguer ou à sauter les clôtures</span>
+        </label>
+        <label class="chk-item" id="chk-anx" onclick="tglChk(this)">
+          <input type="checkbox" id="ch-anx" onclick="event.stopPropagation()">
+          <span>😟 Mon chien souffre d'anxiété de séparation</span>
+        </label>
+        <label class="chk-item" id="chk-agr" onclick="tglChk(this)">
+          <input type="checkbox" id="ch-agr" onclick="event.stopPropagation()">
+          <span>⚠️ Mon chien peut montrer de l'agressivité (nourriture, jouets, territoire…)</span>
+        </label>
+        <label class="chk-item" id="chk-laisse" onclick="tglChk(this)">
+          <input type="checkbox" id="ch-laisse" onclick="event.stopPropagation()">
+          <span>🦮 Mon chien tire fort en laisse</span>
+        </label>
+        <label class="chk-item" id="chk-aboie" onclick="tglChk(this)">
+          <input type="checkbox" id="ch-aboie" onclick="event.stopPropagation()">
+          <span>🔊 Mon chien aboie beaucoup (stress, visiteurs, bruits…)</span>
+        </label>
+      </div>
+
+      <hr class="divider">
+      <div class="fg"><label>Comportements / besoins spécifiques</label><textarea id="fa-comportement" placeholder="Aime les longues balades, a besoin de calme le soir, ne supporte pas la chaleur…"></textarea></div>
+      <div class="fg"><label>Objets de confort que vous souhaitez apporter</label><input type="text" id="fa-objets" placeholder="Peluche canard, couverture bleue, jouet Kong…"></div>
+      <div class="fg"><label>Informations complémentaires / message pour Lidwine</label><textarea id="fa-obs" placeholder="Tout ce qui peut nous aider à prendre soin de votre compagnon dans les meilleures conditions…"></textarea></div>
+    </div>
+  </div>
+
+  <!-- SUBMIT ZONE -->
+  <div class="submit-zone" id="submit-zone">
+    <div class="submit-title">✨ Prêt à envoyer ?</div>
+    <div class="submit-desc">Un clic ouvrira votre application mail avec toutes les informations déjà rédigées. Il ne vous restera qu'à appuyer sur "Envoyer" !</div>
+    <button class="submit-btn" onclick="submitForm()">
+      Envoyer la fiche à Pawtopia <span class="arrow">→</span>
+    </button>
+    <div class="submit-note">
+      📧 Envoi vers : pension.pawtopia@gmail.com<br>
+      🔒 Vos données restent confidentielles et utilisées uniquement par Pawtopia
+    </div>
+  </div>
+
+  <!-- SUCCESS -->
+  <div class="success-zone" id="success-zone">
+    <span class="success-icon">🐾</span>
+    <div class="success-title">Merci !</div>
+    <div class="success-desc">
+      Votre fiche d'admission a été préparée. Si votre application mail n'a pas ouvert automatiquement, vérifiez vos fenêtres ou recommencez.
+      <br><br>
+      À très bientôt à Pawtopia !<br>
+      <strong style="color:var(--forest)">Lidwine 🐾</strong>
+    </div>
+  </div>
+
+</div><!-- /main -->
+
+<footer>
+  Pawtopia – Pension Canine Familiale · Lidwine Renneson · Anoux, Meurthe-et-Moselle (54)<br>
+  pension.pawtopia@gmail.com · ASV · ACACED · TAV
+</footer>
+
+<script>
+/* ── PILLS ── */
+const pillGroups = {};
+function selectPill(el, group) {
+  if(!pillGroups[group]) pillGroups[group] = [];
+  el.closest('.fg').querySelectorAll('.pill').forEach(p => p.classList.remove('sel'));
+  el.classList.add('sel');
+  // Stocker la valeur dans le hidden input
+  const txt = el.textContent.replace(/[🥜🥫🥩🔀✅❌🧳🏡💊]/g,'').trim();
+  const hid = el.closest('.fg').querySelector('input[type=hidden]');
+  if(hid) hid.value = txt;
+  updateProgress();
+}
+
+/* ── TOGGLE TRAIT ── */
+function showTrait(show) {
+  document.getElementById('trait-detail').style.display = show ? 'block' : 'none';
+}
+
+/* ── CHECKLIST ── */
+function tglChk(label) {
+  const cb = label.querySelector('input[type=checkbox]');
+  cb.checked = !cb.checked;
+  label.classList.toggle('checked', cb.checked);
+}
+
+/* ── PROGRESS ── */
+const requiredFields = ['fa-nom','fa-race','fa-poids','fa-puce','fa-proprio','fa-email','fa-tel','fa-urg-nom','fa-urg-tel','fa-veto-nom','fa-veto-tel'];
+const sectionReqs = [
+  ['fa-nom','fa-race','fa-poids','fa-puce'],
+  ['fa-proprio','fa-email','fa-tel','fa-urg-nom','fa-urg-tel','fa-veto-nom','fa-veto-tel'],
+  [],
+  [],
+  []
+];
+
+function updateProgress() {
+  sectionReqs.forEach((reqs, i) => {
+    const done = reqs.length === 0 || reqs.every(id => {
+      const el = document.getElementById(id);
+      return el && el.value.trim().length > 0;
+    });
+    const dot = document.getElementById('prog-' + i);
+    if(done && i < 4) dot.classList.add('done');
+    else dot.classList.remove('done');
+  });
+}
+
+/* ── HELPERS ── */
+function val(id) { const el=document.getElementById(id); return el ? (el.value||'').trim() : ''; }
+function chk(id) { const el=document.getElementById(id); return el ? el.checked : false; }
+function dateStr(id) {
+  const s = val(id);
+  if(!s) return '—';
+  const d = new Date(s+'T12:00:00');
+  return d.toLocaleDateString('fr-FR');
+}
+
+/* ── SUBMIT ── */
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxAEaZfEGYDM1RkgLmoGUfIskY6Thrl0At3Dj10FeoZn2j8frSvecf_IYIiDbmPV--k/exec";
+
+function submitForm() {
+  // Vérification champs obligatoires
+  const missing = requiredFields.filter(id => !val(id));
+  if(missing.length > 0) {
+    missing.forEach(id => {
+      const el = document.getElementById(id);
+      if(el) { el.style.borderColor='var(--red)'; }
+      setTimeout(() => { if(el) el.style.borderColor=''; }, 3000);
+    });
+    // Scroll vers le premier champ manquant
+    const first = document.getElementById(missing[0]);
+    if(first) first.scrollIntoView({ behavior:'smooth', block:'center' });
+    alert('⚠️ Merci de remplir tous les champs obligatoires (★) avant d\'envoyer.');
+    return;
+  }
+  if(!val('fa-sexe')) { alert('⚠️ Merci de sélectionner le sexe de votre animal.'); return; }
+
+  // Comportements cochés
+  const comportements = [];
+  if(chk('ch-fugue')) comportements.push('Tendance à fuguer / sauter les clôtures');
+  if(chk('ch-anx'))   comportements.push('Anxiété de séparation');
+  if(chk('ch-agr'))   comportements.push('Peut montrer de l\'agressivité');
+  if(chk('ch-laisse'))comportements.push('Tire fort en laisse');
+  if(chk('ch-aboie')) comportements.push('Aboie beaucoup');
+
+  // Données à envoyer au script
+  const data = {
+    nom:           val('fa-nom'),
+    race:          val('fa-race'),
+    sexe:          val('fa-sexe'),
+    ddn:           dateStr('fa-ddn'),
+    poids:         val('fa-poids'),
+    couleur:       val('fa-couleur'),
+    puce:          val('fa-puce'),
+    carnet:        val('fa-carnet'),
+    proprio:       val('fa-proprio'),
+    email:         val('fa-email'),
+    tel:           val('fa-tel'),
+    tel2:          val('fa-tel2'),
+    adresse:       val('fa-adresse'),
+    assur:         val('fa-assur'),
+    urgNom:        val('fa-urg-nom'),
+    urgTel:        val('fa-urg-tel'),
+    vetoNom:       val('fa-veto-nom'),
+    vetoTel:       val('fa-veto-tel'),
+    alimtype:      val('fa-alimtype'),
+    alimmarque:    val('fa-alimmarque'),
+    alimqte:       val('fa-alimqte'),
+    alimrepas:     val('fa-alimrepas'),
+    friandises:    val('fa-friandises'),
+    allergies:     val('fa-allergies'),
+    nourrit:       val('fa-nourrit'),
+    alimNote:      val('fa-alim-note'),
+    sante:         val('fa-sante'),
+    maladies:      val('fa-maladies'),
+    chirurgie:     val('fa-chirurgie'),
+    allergmed:     val('fa-allergmed'),
+    anti:          dateStr('fa-anti'),
+    verm:          dateStr('fa-verm'),
+    vacChpp:       dateStr('vac-chpp'),
+    vacLepto:      dateStr('vac-lepto'),
+    vacToux:       dateStr('vac-toux'),
+    vacRage:       dateStr('vac-rage'),
+    traitement:    val('fa-traitement'),
+    traitDetail:   val('fa-traitdetail'),
+    car:           val('fa-car'),
+    autchien:      val('fa-autchien'),
+    chats:         val('fa-chats'),
+    enfants:       val('fa-enfants'),
+    peurs:         val('fa-peurs'),
+    sommeil:       val('fa-sommeil'),
+    comportements: comportements.length ? comportements.join(' | ') : 'Rien à signaler',
+    comportement:  val('fa-comportement'),
+    objets:        val('fa-objets'),
+    obs:           val('fa-obs')
+  };
+
+  // Afficher l'état de chargement sur le bouton
+  const btn = document.querySelector('.submit-btn');
+  const btnOriginal = btn.innerHTML;
+  btn.innerHTML = '⏳ Envoi en cours…';
+  btn.disabled = true;
+  btn.style.opacity = '0.7';
+
+  fetch(SCRIPT_URL, {
+    method: 'POST',
+    mode: 'no-cors',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(data)
+  })
+  .then(() => {
+    // no-cors = pas de réponse lisible, mais si on arrive ici c'est que ça a fonctionné
+    document.getElementById('submit-zone').style.display = 'none';
+    document.getElementById('success-zone').style.display = 'block';
+    document.getElementById('success-zone').scrollIntoView({ behavior: 'smooth' });
+  })
+  .catch(() => {
+    btn.innerHTML = btnOriginal;
+    btn.disabled = false;
+    btn.style.opacity = '1';
+    alert('❌ Une erreur est survenue lors de l\'envoi. Vérifiez votre connexion internet et réessayez.');
+  });
+}
+</script>
+</body>
+</html>
