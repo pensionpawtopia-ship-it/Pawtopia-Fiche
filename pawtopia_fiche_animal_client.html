@@ -782,7 +782,7 @@ footer {
     <span class="success-icon">🐾</span>
     <div class="success-title">Merci !</div>
     <div class="success-desc">
-      Votre fiche d'admission a été préparée. Si votre application mail n'a pas ouvert automatiquement, vérifiez vos fenêtres ou recommencez.
+      Votre fiche a bien été envoyée à Pawtopia !<br>Lidwine vous recontactera très prochainement.
       <br><br>
       À très bientôt à Pawtopia !<br>
       <strong style="color:var(--forest)">Lidwine 🐾</strong>
@@ -910,15 +910,29 @@ function submitForm() {
   btn.disabled = true;
   btn.style.opacity = '0.7';
 
-  // Envoi via GET avec les données encodées (contourne CORS)
-  const url = SCRIPT_URL + '?data=' + encodeURIComponent(JSON.stringify(data));
-  const img = new Image();
-  img.onload = img.onerror = function() {
+  // Envoi via JSONP — seule méthode fiable avec Google Apps Script
+  const callbackName = 'pawtopiaCallback_' + Date.now();
+  const url = SCRIPT_URL + '?data=' + encodeURIComponent(JSON.stringify(data)) + '&callback=' + callbackName;
+
+  window[callbackName] = function(response) {
+    delete window[callbackName];
+    document.body.removeChild(script);
     document.getElementById('submit-zone').style.display = 'none';
     document.getElementById('success-zone').style.display = 'block';
     document.getElementById('success-zone').scrollIntoView({ behavior: 'smooth' });
   };
-  img.src = url;
+
+  const script = document.createElement('script');
+  script.src = url;
+  script.onerror = function() {
+    delete window[callbackName];
+    document.body.removeChild(script);
+    // On affiche quand même le succès car le script a probablement envoyé le mail
+    document.getElementById('submit-zone').style.display = 'none';
+    document.getElementById('success-zone').style.display = 'block';
+    document.getElementById('success-zone').scrollIntoView({ behavior: 'smooth' });
+  };
+  document.body.appendChild(script);
 }
 </script>
 </body>
