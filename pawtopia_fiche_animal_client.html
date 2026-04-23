@@ -855,7 +855,7 @@ function dateStr(id) {
 }
 
 /* ── SUBMIT ── */
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycby5fYjStziUeV8zWOWkybQ_fFTshJXk1ntSLsR-9Gd6-t2ox3ihWUJ63wUeXuWWFMIb/exec";
+const FORMSPREE_URL = "https://formspree.io/f/mrerodjy";
 
 function submitForm() {
   const missing = requiredFields.filter(id => !val(id));
@@ -877,32 +877,8 @@ function submitForm() {
   if(chk('ch-anx'))   comportements.push('Anxiété de séparation');
   if(chk('ch-agr'))   comportements.push('Peut montrer de l\'agressivité');
   if(chk('ch-laisse'))comportements.push('Tire fort en laisse');
+  if(chk('ch-aboie')) comportements.push('Tire fort en laisse');
   if(chk('ch-aboie')) comportements.push('Aboie beaucoup');
-
-  const data = {
-    nom: val('fa-nom'), race: val('fa-race'), sexe: val('fa-sexe'),
-    ddn: dateStr('fa-ddn'), poids: val('fa-poids'), couleur: val('fa-couleur'),
-    puce: val('fa-puce'), carnet: val('fa-carnet'),
-    proprio: val('fa-proprio'), email: val('fa-email'), tel: val('fa-tel'),
-    tel2: val('fa-tel2'), adresse: val('fa-adresse'), assur: val('fa-assur'),
-    urgNom: val('fa-urg-nom'), urgTel: val('fa-urg-tel'),
-    vetoNom: val('fa-veto-nom'), vetoTel: val('fa-veto-tel'),
-    alimtype: val('fa-alimtype'), alimmarque: val('fa-alimmarque'),
-    alimqte: val('fa-alimqte'), alimrepas: val('fa-alimrepas'),
-    friandises: val('fa-friandises'), allergies: val('fa-allergies'),
-    nourrit: val('fa-nourrit'), alimNote: val('fa-alim-note'),
-    sante: val('fa-sante'), maladies: val('fa-maladies'),
-    chirurgie: val('fa-chirurgie'), allergmed: val('fa-allergmed'),
-    anti: dateStr('fa-anti'), verm: dateStr('fa-verm'),
-    vacChpp: dateStr('vac-chpp'), vacLepto: dateStr('vac-lepto'),
-    vacToux: dateStr('vac-toux'), vacRage: dateStr('vac-rage'),
-    traitement: val('fa-traitement'), traitDetail: val('fa-traitdetail'),
-    car: val('fa-car'), autchien: val('fa-autchien'),
-    chats: val('fa-chats'), enfants: val('fa-enfants'),
-    peurs: val('fa-peurs'), sommeil: val('fa-sommeil'),
-    comportements: comportements.length ? comportements.join(' | ') : 'Rien à signaler',
-    comportement: val('fa-comportement'), objets: val('fa-objets'), obs: val('fa-obs')
-  };
 
   // Bouton en chargement
   const btn = document.querySelector('.submit-btn');
@@ -910,29 +886,83 @@ function submitForm() {
   btn.disabled = true;
   btn.style.opacity = '0.7';
 
-  // Envoi via JSONP — seule méthode fiable avec Google Apps Script
-  const callbackName = 'pawtopiaCallback_' + Date.now();
-  const url = SCRIPT_URL + '?data=' + encodeURIComponent(JSON.stringify(data)) + '&callback=' + callbackName;
-
-  window[callbackName] = function(response) {
-    delete window[callbackName];
-    document.body.removeChild(script);
-    document.getElementById('submit-zone').style.display = 'none';
-    document.getElementById('success-zone').style.display = 'block';
-    document.getElementById('success-zone').scrollIntoView({ behavior: 'smooth' });
+  const data = {
+    '🐕 Nom':              val('fa-nom'),
+    '🐕 Race':             val('fa-race'),
+    '🐕 Sexe':             val('fa-sexe'),
+    '🐕 Date naissance':   dateStr('fa-ddn'),
+    '🐕 Poids':            val('fa-poids') + ' kg',
+    '🐕 Couleur':          val('fa-couleur') || '—',
+    '🐕 N° puce':          val('fa-puce'),
+    '🐕 Carnet/Passeport': val('fa-carnet') || '—',
+    '👤 Propriétaire':     val('fa-proprio'),
+    '👤 Email':            val('fa-email'),
+    '👤 Téléphone':        val('fa-tel'),
+    '👤 Tél. secondaire':  val('fa-tel2') || '—',
+    '👤 Adresse':          val('fa-adresse') || '—',
+    '👤 Assurance RC':     val('fa-assur') || '—',
+    '🚨 Urgence nom':      val('fa-urg-nom'),
+    '🚨 Urgence tél':      val('fa-urg-tel'),
+    '🏥 Vétérinaire':      val('fa-veto-nom'),
+    '🏥 Vétérinaire tél':  val('fa-veto-tel'),
+    '🍽️ Alimentation':     val('fa-alimtype') || '—',
+    '🍽️ Marque':           val('fa-alimmarque') || '—',
+    '🍽️ Quantité/repas':   val('fa-alimqte') || '—',
+    '🍽️ Nb repas/jour':    val('fa-alimrepas') || '—',
+    '🍽️ Friandises':       val('fa-friandises') || '—',
+    '🍽️ Allergies':        val('fa-allergies') || 'Aucune',
+    '🍽️ Nourriture par':   val('fa-nourrit') || '—',
+    '🍽️ Notes alim':       val('fa-alim-note') || '—',
+    '🏥 État général':     val('fa-sante') || '—',
+    '🏥 Maladies':         val('fa-maladies') || 'Aucune',
+    '🏥 Chirurgies':       val('fa-chirurgie') || 'Aucune',
+    '🏥 Allergies méd':    val('fa-allergmed') || 'Aucune',
+    '🏥 Antiparasitaire':  dateStr('fa-anti'),
+    '🏥 Vermifuge':        dateStr('fa-verm'),
+    '💉 CHPP':             dateStr('vac-chpp'),
+    '💉 Leptospirose':     dateStr('vac-lepto'),
+    '💉 Toux du chenil':   dateStr('vac-toux'),
+    '💉 Rage':             dateStr('vac-rage'),
+    '💊 Traitement':       val('fa-traitement') || 'Aucun',
+    '💊 Détail trait.':    val('fa-traitdetail') || '—',
+    '🐾 Caractère':        val('fa-car') || '—',
+    '🐾 Avec chiens':      val('fa-autchien') || '—',
+    '🐾 Avec chats':       val('fa-chats') || '—',
+    '🐾 Avec enfants':     val('fa-enfants') || '—',
+    '🐾 Peurs':            val('fa-peurs') || '—',
+    '🐾 Sommeil':          val('fa-sommeil') || '—',
+    '🐾 Points à signaler':comportements.join(' | ') || 'Rien à signaler',
+    '🐾 Besoins spéc.':   val('fa-comportement') || '—',
+    '🐾 Objets confort':   val('fa-objets') || '—',
+    '💬 Informations sup.':val('fa-obs') || '—',
+    '_replyto':            val('fa-email'),
+    '_subject':            '🐾 Fiche admission – ' + val('fa-nom') + ' (' + val('fa-race') + ') – ' + val('fa-proprio')
   };
 
-  const script = document.createElement('script');
-  script.src = url;
-  script.onerror = function() {
-    delete window[callbackName];
-    document.body.removeChild(script);
-    // On affiche quand même le succès car le script a probablement envoyé le mail
-    document.getElementById('submit-zone').style.display = 'none';
-    document.getElementById('success-zone').style.display = 'block';
-    document.getElementById('success-zone').scrollIntoView({ behavior: 'smooth' });
-  };
-  document.body.appendChild(script);
+  fetch(FORMSPREE_URL, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+    body: JSON.stringify(data)
+  })
+  .then(res => res.json())
+  .then(res => {
+    if(res.ok || res.next) {
+      document.getElementById('submit-zone').style.display = 'none';
+      document.getElementById('success-zone').style.display = 'block';
+      document.getElementById('success-zone').scrollIntoView({ behavior: 'smooth' });
+    } else {
+      btn.innerHTML = 'Envoyer la fiche à Pawtopia <span class="arrow">→</span>';
+      btn.disabled = false;
+      btn.style.opacity = '1';
+      alert('❌ Erreur lors de l\'envoi. Veuillez réessayer.');
+    }
+  })
+  .catch(() => {
+    btn.innerHTML = 'Envoyer la fiche à Pawtopia <span class="arrow">→</span>';
+    btn.disabled = false;
+    btn.style.opacity = '1';
+    alert('❌ Erreur de connexion. Vérifiez votre internet et réessayez.');
+  });
 }
 </script>
 </body>
